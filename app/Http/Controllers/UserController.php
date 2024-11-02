@@ -67,7 +67,7 @@ class UserController extends Controller
         if ($relationships !== null) {
             foreach ($relationships as $relationship => $data) {
                 if ($relationship === 'roles') {
-                    $user->roles()->sync(array_column($data['data'], 'id'));
+                    $user->roles()->sync(Arr::pluck($data['data'], 'id'));
                 }
             }
         }
