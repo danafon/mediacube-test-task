@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RevokeTokenController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TokenController;
@@ -7,10 +9,9 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/sanctum/token', TokenController::class);
-
-Route::controller(UserController::class)->group(function () {
-    Route::post('/users', 'store');
-});
+Route::post('/users', [UserController::class, 'store']);
+Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LogoutController::class, 'logout']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/sanctum/token/revoke', RevokeTokenController::class);

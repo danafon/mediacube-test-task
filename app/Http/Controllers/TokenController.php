@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TokenResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class TokenController
+class TokenController extends Controller
 {
     public function __invoke(Request $request)
     {
