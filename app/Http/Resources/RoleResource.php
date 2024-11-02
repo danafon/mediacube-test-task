@@ -23,8 +23,8 @@ class RoleResource extends JsonResource
                 'updated_at' => $this->updated_at->format('d-m-Y H:i:s'),
             ],
             'relationships' => [
-                'users' => new UserIdentifierCollection($this->users)
-            ]
+                'users' => new UserIdentifierCollection($this->users),
+            ],
         ];
     }
 }

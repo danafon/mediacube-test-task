@@ -7,12 +7,9 @@ use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 

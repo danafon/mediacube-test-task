@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
@@ -66,7 +65,7 @@ class UserController extends Controller
 
         $relationships = Arr::get($validated, 'data.relationships');
         if ($relationships !== null) {
-            foreach ($relationships as $relationship => $data){
+            foreach ($relationships as $relationship => $data) {
                 if ($relationship === 'roles') {
                     $user->roles()->sync(array_column($data['data'], 'id'));
                 }

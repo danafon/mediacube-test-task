@@ -24,8 +24,8 @@ class UserResource extends JsonResource
                 'updated_at' => $this->updated_at->format('d-m-Y H:i:s'),
             ],
             'relationships' => [
-                'roles' => new RoleIdentifierCollection($this->roles)
-            ]
+                'roles' => new RoleIdentifierCollection($this->roles),
+            ],
         ];
     }
 }

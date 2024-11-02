@@ -4,19 +4,17 @@ namespace App\Policies;
 
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class RolePolicy
 {
-    public function before(User $user, string $ability): bool|null
+    public function before(User $user, string $ability): ?bool
     {
         if ($user->isAdministrator()) {
             return true;
         }
-    
+
         return null;
     }
-
 
     /**
      * Determine whether the user can view any models.
