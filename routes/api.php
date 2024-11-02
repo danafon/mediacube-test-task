@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RevokeTokenController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\UserController;
@@ -12,6 +13,8 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/sanctum/token/revoke', RevokeTokenController::class);
+
     Route::controller(UserController::class)->group(function () {
         Route::get('/users', 'index');
         Route::get('/users/{user}', 'show');
