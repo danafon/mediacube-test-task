@@ -23,7 +23,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = Auth::user('sanctum');
+        Gate::authorize('viewAny', Role::class);
 
         $limit = $request->get('limit', 10);
         $roles = Role::paginate($limit);
@@ -36,10 +36,9 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
+        Gate::authorize('create', Role::class);
         $validated = $request->validated();
 
-        // $user = Auth::user('sanctum');
-        // Gate::authorize('create', Role::class);
         $role = Role::create(Arr::get($validated, 'data.attributes'));
 
         return new RoleResource($role);
@@ -50,7 +49,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        // Gate::authorize('create', Role::class);
+        Gate::authorize('view', $role);
 
         return new RoleResource($role);
     }
@@ -60,10 +59,9 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
+        Gate::authorize('update', $role);
         $validated = $request->validated();
 
-        // $user = Auth::user('sanctum');
-        // Gate::authorize('create', Role::class);
         $role->update(Arr::get($validated, 'data.attributes'));
 
         return new RoleResource($role);
@@ -74,8 +72,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        // $user = Auth::user('sanctum');
-        // $user->authorize('delete', Role::class);
+        Gate::authorize('delete', $role);
         $role->delete();
 
         return Response::noContent();

@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class RolePolicy
+class UserPolicy
 {
     public function before(User $user, string $ability): bool|null
     {
@@ -16,7 +15,6 @@ class RolePolicy
     
         return null;
     }
-
 
     /**
      * Determine whether the user can view any models.
@@ -29,32 +27,24 @@ class RolePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Role $role): bool
+    public function view(User $user, User $model): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        return false;
+        return $user->is($model);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Role $role): bool
+    public function update(User $user, User $model): bool
     {
-        return false;
+        return $user->is($model);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Role $role): bool
+    public function delete(User $user, User $model): bool
     {
-        return false;
+        return $user->is($model);
     }
 }
