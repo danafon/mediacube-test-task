@@ -29,6 +29,8 @@ class UpdateUserRequest extends FormRequest
             'data.attributes.email' => 'sometimes|email',
             'data.attributes.password' => 'sometimes|string',
             'data.attributes.repeated_password' => 'required_with:data.attributes.password|same:data.attributes.password',
+            'data.relationships.roles.data.*.type' => 'sometimes|string|in:roles',
+            'data.relationships.roles.data.*.id' => 'sometimes|int|exists:roles,id',
         ];
     }
 }

@@ -24,7 +24,7 @@ class UserController extends Controller
         Gate::authorize('viewAny', User::class);
 
         $limit = $request->get('limit', 10);
-        $roles = User::paginate($limit);
+        $roles = User::with(['roles'])->paginate($limit);
 
         return new UserCollection($roles);
     }
@@ -63,6 +63,15 @@ class UserController extends Controller
         Gate::authorize('update', $user);
         $validated = $request->validated();
         $user->update(Arr::get($validated, 'data.attributes'));
+
+        $relationships = Arr::get($validated, 'data.relationships');
+        if ($relationships !== null) {
+            foreach ($relationships as $relationship => $data){
+                if ($relationship === 'roles') {
+                    $user->roles()->sync(array_column($data['data'], 'id'));
+                }
+            }
+        }
 
         return new UserResource($user);
     }

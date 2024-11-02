@@ -26,7 +26,7 @@ class RoleController extends Controller
         Gate::authorize('viewAny', Role::class);
 
         $limit = $request->get('limit', 10);
-        $roles = Role::paginate($limit);
+        $roles = Role::with('users')->paginate($limit);
 
         return new RoleCollection($roles);
     }
