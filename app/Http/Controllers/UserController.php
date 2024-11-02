@@ -10,8 +10,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -67,7 +70,16 @@ class UserController extends Controller
         if ($relationships !== null) {
             foreach ($relationships as $relationship => $data) {
                 if ($relationship === 'roles') {
+                    /** @var User */
+                    $authorizedUser = Auth::user('sanctum');
+                    if (! $authorizedUser->isAdministrator()) {
+                        throw ValidationException::withMessages([
+                            'roles' => ['Only admin can update roles.'],
+                        ]);
+                    }
                     $user->roles()->sync(Arr::pluck($data['data'], 'id'));
+
+                    Cache::forget('users.'.$user->id.'.is_admin');
                 }
             }
         }
