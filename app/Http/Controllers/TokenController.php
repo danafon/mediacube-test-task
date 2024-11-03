@@ -12,15 +12,17 @@ use Illuminate\Validation\ValidationException;
 
 class TokenController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): TokenResource
     {
         $validated = $request->validate([
             'data.attributes.email' => 'required|email',
             'data.attributes.password' => 'required',
             'data.attributes.device_name' => 'required',
         ]);
+        /** @var array<string,string> $attributes */
         $attributes = Arr::get($validated, 'data.attributes');
 
+        /** @var ?User $user */
         $user = User::where('email', $attributes['email'])->first();
 
         if (! $user || ! Hash::check($attributes['password'], $user->password)) {

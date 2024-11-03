@@ -8,6 +8,7 @@ use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
@@ -18,10 +19,11 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): RoleCollection
     {
         Gate::authorize('viewAny', Role::class);
 
+        /** @var int $limit */
         $limit = $request->get('limit', 10);
         $roles = Role::with('users')->paginate($limit);
 
@@ -31,12 +33,13 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(StoreRoleRequest $request): RoleResource
     {
         Gate::authorize('create', Role::class);
         $validated = $request->validated();
-
-        $role = Role::create(Arr::get($validated, 'data.attributes'));
+        /** @var array<string,mixed> $attributes */
+        $attributes = Arr::get($validated, 'data.attributes');
+        $role = Role::create($attributes);
 
         return new RoleResource($role);
     }
@@ -44,7 +47,7 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(Role $role): RoleResource
     {
         Gate::authorize('view', $role);
 
@@ -54,12 +57,14 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role): RoleResource
     {
         Gate::authorize('update', $role);
         $validated = $request->validated();
 
-        $role->update(Arr::get($validated, 'data.attributes'));
+        /** @var array<string,mixed> $attributes */
+        $attributes = Arr::get($validated, 'data.attributes');
+        $role->update($attributes);
 
         return new RoleResource($role);
     }
@@ -67,7 +72,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(Role $role): HttpResponse
     {
         Gate::authorize('delete', $role);
         $role->delete();

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,6 +12,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -52,6 +62,8 @@ class User extends Authenticatable
 
     /**
      * The roles that belong to the user.
+     *
+     * @return BelongsToMany<Role,$this>
      */
     public function roles(): BelongsToMany
     {
@@ -60,7 +72,7 @@ class User extends Authenticatable
 
     public function isAdministrator(): bool
     {
-        return Cache::remember('users.'.$this->id.'.is_admin', 60 * 60 * 24, function () {
+        return (bool) Cache::remember('users.'.$this->id.'.is_admin', 60 * 60 * 24, function () {
             return $this->roles()->where('title', 'admin')->exists();
         });
     }

@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class Role extends Model
 {
     use HasTimestamps;
@@ -34,6 +41,8 @@ class Role extends Model
 
     /**
      * The users that belong to the role.
+     *
+     * @return BelongsToMany<User,$this>
      */
     public function users(): BelongsToMany
     {
