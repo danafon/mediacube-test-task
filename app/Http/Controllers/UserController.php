@@ -100,6 +100,7 @@ class UserController extends Controller
     public function destroy(User $user): HttpResponse
     {
         Gate::authorize('delete', $user);
+        $user->roles()->detach();
         $user->delete();
 
         return Response::noContent();

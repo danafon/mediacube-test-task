@@ -35,6 +35,7 @@ it('lists roles correctly', function (?User $user, int $status, ?bool $checkJson
     // Assert
     $response->assertStatus($status);
     if ($checkJson) {
+        $response->assertJsonCount(2, 'data');
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
@@ -180,6 +181,7 @@ it('deletes role correctly', function (?User $user, int $status, bool $expectSuc
     if ($user) {
         Sanctum::actingAs($user);
     }
+    $this->customerRole->users()->detach();
     // Then
     $response = $this->deleteJson("/api/roles/{$this->customerRole->id}");
     // Assert
@@ -194,3 +196,12 @@ it('deletes role correctly', function (?User $user, int $status, bool $expectSuc
     'customer' => [fn () => $this->customerUser, 403, false],
     'guest' => [null, 401, false],
 ]);
+
+it('does not delete a role with existing users', function () {
+    // When
+    Sanctum::actingAs($this->adminUser);
+    // Then
+    $response = $this->deleteJson("/api/roles/{$this->customerRole->id}");
+    // Assert
+    $response->assertStatus(409);
+});

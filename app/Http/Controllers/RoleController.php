@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DBConflictException;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleCollection;
@@ -75,6 +76,9 @@ class RoleController extends Controller
     public function destroy(Role $role): HttpResponse
     {
         Gate::authorize('delete', $role);
+        if ($role->users()->exists()) {
+            throw new DBConflictException('user', 'role');
+        }
         $role->delete();
 
         return Response::noContent();
