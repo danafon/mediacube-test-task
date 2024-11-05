@@ -1,11 +1,7 @@
 <?php
 
-use App\Models\Role;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Arr;
-use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
 
