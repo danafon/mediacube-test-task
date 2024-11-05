@@ -24,8 +24,8 @@ class UserResource extends JsonResource
             'attributes' => [
                 'name' => $this->name,
                 'email' => $this->email,
-                'created_at' => $this->created_at->format('d-m-Y H:i:s'),
-                'updated_at' => $this->updated_at->format('d-m-Y H:i:s'),
+                'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             ],
             'relationships' => [
                 'roles' => new RoleIdentifierCollection($this->roles),
