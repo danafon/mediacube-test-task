@@ -6,11 +6,11 @@ use App\Http\Controllers\TokenController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/sanctum/token', TokenController::class);
+Route::post('/token', TokenController::class);
 Route::post('/users', [UserController::class, 'store']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/sanctum/token/revoke', RevokeTokenController::class);
+    Route::post('/token/revoke', RevokeTokenController::class);
 
     Route::controller(UserController::class)->group(function () {
         Route::get('/users', 'index');
